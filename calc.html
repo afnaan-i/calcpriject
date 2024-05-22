@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="style.css"> </head>
+  <title>Your calculator</title>
+   
+</head>
+<body>
+
+    <div class="container">
+        <div class="calculator">
+            <input type="text" placeholder="0" id="output-screen">
+            <button onclick="Clear()">C1</button>
+            <button onclick="del()">DEL</button>
+            <button onclick="display('%')">%</button>
+            <button onclick="display('/')">/</button>
+            <button onclick="display('7')">7</button>
+            <button onclick="display('8')">8</button>
+            <button onclick="display('9')">9</button>
+            <button onclick="display('*')">*</button>
+            <button onclick="display('4')">4</button>
+            <button onclick="display('5')">5</button>
+            <button onclick="display('6')">6</button>
+            <button onclick="display('-')">-</button>
+            <button onclick="display('1')">1</button>
+            <button onclick="display('2')">2</button>
+            <button onclick="display('3')">3</button>
+            <button onclick="display('+')">+</button>
+            <button onclick="display('.')">.</button>
+            <button onclick="display('0')">0</button>
+           <button onclick="calculate()" class="equal">=</button>
+        
+        </div>
+    </div>
+    <script>
+        let outputScreen = document.getElementById("output-screen");
+        function display(num) {
+      outputScreen.value += num; // Add number to the output screen
+    }
+
+
+    function calculate(event) {
+      try {
+        // Get the expression from the input screen
+        const expression = outputScreen.value;
+    
+        // // Basic validation for non-numeric characters (except decimal)
+        // if (/[^0-9\.]/.test(expression)) {
+        //   throw new Error("Invalid input: Only numbers and decimals allowed.");
+        // }
+
+        // Split the expression into tokens (numbers and operators)
+        let tokens = [];
+        let currentNumber = "";
+        const operators = ['+', '-', '*', '/'];
+        for (let char of expression) {
+          if (operators.includes(char)) {
+            tokens.push(parseFloat(currentNumber));
+            currentNumber = "";
+            tokens.push(char);
+          } else {
+            currentNumber += char;
+          }
+        }
+        tokens.push(parseFloat(currentNumber));
+
+        // Perform calculations using a loop
+        let result = tokens[0];
+        for (let i = 1; i < tokens.length; i += 2) {
+          const operator = tokens[i];
+          const operand = tokens[i + 1];
+
+          switch (operator) {
+            case '+':
+              result += operand;
+              break;
+            case '-':
+              result -= operand;
+              break;
+            case '*':
+              result *= operand;
+              break;
+            case '/':
+              if (operand === 0) {
+                throw new Error("Division by zero");
+              }
+              result /= operand;
+              break;
+            default:
+              throw new Error("Invalid operator");
+          }
+        }
+
+        // Display the calculated result
+        outputScreen.value = result;
+
+      } catch (err) {
+        // Handle errors and display appropriate message (you can customize this)
+        alert(err.message); 
+        outputScreen.value = ""; // Clear the output screen on error
+      }
+    }
+    function Clear() {
+  outputScreen.value = "";
+}
+function del() {
+  let currentText = outputScreen.value;
+  if (currentText.length > 0) {
+    outputScreen.value = currentText.substring(0, currentText.length - 1);
+  }
+}
+
+  </script>
+</body>
+</html>
+    
